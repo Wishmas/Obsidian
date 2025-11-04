@@ -1,0 +1,315 @@
+{
+  "main": {
+    "id": "9e8f87c9662a262f",
+    "type": "split",
+    "children": [
+      {
+        "id": "13c618036c1eb868",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a042b0c441496b67",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Конспекты по метематике/Линейная алгебра.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Линейная алгебра"
+            }
+          },
+          {
+            "id": "ef86c5f487d154fe",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Машинное обучение/Эконометрика.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Эконометрика"
+            }
+          },
+          {
+            "id": "26f25809f13e512a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Конспекты по метематике/Статистика.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Статистика"
+            }
+          },
+          {
+            "id": "3b964e6235412e58",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Конспекты по метематике/Теория вероятностей.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Теория вероятностей"
+            }
+          },
+          {
+            "id": "2296d4f330f0b1f3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Машинное обучение/Машинное обучение.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Машинное обучение"
+            }
+          },
+          {
+            "id": "0151a16e14ef7f1f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Конспекты по метематике/Математические операции в python.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Математические операции в python"
+            }
+          },
+          {
+            "id": "b8bed24616563978",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Конспекты по метематике/Теория вероятностей.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Теория вероятностей"
+            }
+          },
+          {
+            "id": "9f5039d42e641331",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Софты/Airflow.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Airflow"
+            }
+          }
+        ],
+        "currentTab": 7
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6c2c7abce4d94fac",
+    "type": "split",
+    "children": [
+      {
+        "id": "d2f57c242cbebd19",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5a99b8d316cd6dc2",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "1f637f279f1dc986",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "43e83c2dd6ddb26e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 255.5
+  },
+  "right": {
+    "id": "50b1d342651c4f82",
+    "type": "split",
+    "children": [
+      {
+        "id": "cb1faae500b11966",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fadf09d400f4c3f2",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Конспекты по метематике/Линейная алгебра.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Линейная алгебра"
+            }
+          },
+          {
+            "id": "416e9e6766c7af93",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Конспекты по метематике/Линейная алгебра.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Линейная алгебра"
+            }
+          },
+          {
+            "id": "5d74e9a6d28da6f0",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "f5ffdd85f5918ce1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Конспекты по метематике/Линейная алгебра.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Линейная алгебра"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "bases:Create new base": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "9f5039d42e641331",
+  "lastOpenFiles": [
+    "Софты/Яндекс Метрика.md",
+    "Конспекты по метематике/Математические операции в python.md",
+    "Софты/Airflow.md",
+    "Машинное обучение/Эконометрика.md",
+    "Разработка/API и HTTP/API и HTTP.md",
+    "Машинное обучение/Машинное обучение.md",
+    "Конспекты по метематике/Линейная алгебра.md",
+    "Конспекты по метематике/Бекап Ervernote.pdf",
+    "Конспекты по метематике/Статистика.md",
+    "Конспекты по метематике/Математический анализ.md",
+    "Конспекты по метематике/Теория вероятностей.md",
+    "Машинное обучение/Вложения/Untitled 18.png",
+    "Машинное обучение/Вложения/Untitled 20.png",
+    "Машинное обучение/Вложения/Untitled 19.png",
+    "Машинное обучение/Untitled 19.png",
+    "Машинное обучение/Untitled 18.png",
+    "Машинное обучение/Untitled 20.png",
+    "Диплом/Структура работы.md",
+    "Диплом/Первый драфт.md",
+    "Диплом/Матрица.md",
+    "Диплом",
+    "Вложения/Pasted image 20241013180435.png",
+    "Вложения/Pasted image 20241013180309.png",
+    "Вложения/Pasted image 20241013172057.png",
+    "Вложения/Pasted image 20241013171858.png",
+    "Разработка/Алгоритмы/Алгоритмы.md",
+    "Разработка/Алгоритмы",
+    "Машинное обучение/Вложения/Эконометрика",
+    "Машинное обучение/Вложения/Машинное обучение",
+    "Машинное обучение/Вложения",
+    "Разработка/Linux/Linux.md",
+    "Разработка/Алгоритмы/Алгоритмы/Алгоритмы.md",
+    "Разработка/Алгоритмы/Алгоритмы/Вложения/Алгоритмы",
+    "Разработка/Алгоритмы/Алгоритмы/Вложения",
+    "Разработка/Алгоритмы/ExportBlock-631aa3e6-395e-4244-887e-61b02f288fae-Part-1.zip",
+    "Разработка/Алгоритмы/Алгоритмы",
+    "Разработка/Git/GIT.md",
+    "Разработка/Docker/Docker.md",
+    "Разработка/docker (2)/Docker 23fba4585d1b42b5a3a100b9a813e5f4.md",
+    "Untitled 5.md",
+    "Untitled 3 — копия.md",
+    "Untitled 2 — копия.md",
+    "Untitled 4 — копия.md",
+    "Untitled 4.md",
+    "Untitled 3.md",
+    "Untitled 2.md"
+  ]
+}
