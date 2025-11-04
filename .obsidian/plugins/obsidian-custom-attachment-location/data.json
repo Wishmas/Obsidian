@@ -1,5 +1,5 @@
 {
-  "attachmentFolderPath": "./Вложения/${noteFileName}",
+  "attachmentFolderPath": "Вложения/${noteFileName}",
   "attachmentRenameMode": "All",
   "collectAttachmentUsedByMultipleNotesMode": "Skip",
   "customTokensStr": "",

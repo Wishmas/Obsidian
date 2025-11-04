@@ -5,5 +5,6 @@
   "things-style@@em-color": "#BDB56C",
   "things-style@@h1-color": "#56F0AD",
   "things-style@@h3-color": "#FF8440",
-  "things-style@@h2-color": "#95C56F"
+  "things-style@@h2-color": "#95C56F",
+  "things-style@@quote-color": "#BDB56C"
 }

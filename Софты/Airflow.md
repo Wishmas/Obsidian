@@ -620,11 +620,195 @@ foo = Variable.get("key", deserialize_json=True)
 Однако для небольших наборов данных существует удобный механизм обмена такими небольшими сообщениями — это **XCom**. **XCom** представляет удобный интерфейс, предоставляющий доступ к данным по ключу и значению.
 В простейшем случае данные хранятся в таблице базы метаданных Airflow с набором полей. Под небольшими понимается данные размером в несколько килобайт, может быть мегабайт. Зависит от ограничения базы данных на хранения данных в 1 ячейке.
 ![[Pasted image 20251103160614.png]]
-
 Чтобы положить данные в **XCom**, указываем уникальный ключ `key` и любое текстовое или числовое значение, которое вы хотите записать в `value`:
 ```python
 task_instance.xcom_push(key='key', value='value')
 ```
+Чтобы получить данные из **XCom**, указываем уникальный ключ. Важный момент: обмен данными возможен только в рамках одного **DAG**. Попытка обратиться к **XCom**, который был сформирован в другом **DAG**, не будет успешной.
+```python
+task_instance.xcom_pull(task_ids='task_id', key='key')
+```
+`context['ti']` - объект Task.
+```python
+# Функция которая положит в Xcom некотрое значение 
+def push_function(**context): 
+	context['ti'].xcom_push(key='key_name', value="Text...") 
+	
+# Функция которая извлечет это значение 
+def pull_function(**context): 
+	ti = context['ti'] 
+	value_pulled = ti.xcom_pull(key='key_name') 
+	return value_pulled
+```
+Результат можно найти `Admin -> Xcom`.
+Или в случае с bashOperator:
+```python
+downloading_data = BashOperator( 
+task_id='downloading_data', 
+bash_command='echo "Hello, I am a value!"', 
+# Результат работы (то есть вывод команды echo ...) будет отправлен в Xcom
+do_xcom_push=True, 
+ dag=dag ) 
+ 
+ fetching_data = BashOperator( 
+ task_id='fetching_data', 
+ #  ti это тот же экземпляр задачи что и в PythonOperator 
+ bash_command="echo 'XCom fetched: {{ ti.xcom_pull(task_ids=[\'downloading_data\']) }}'", 
+ dag=dag )
+```
+![[file-20251104151541792.png]]
+
+## Ветвление и BranchOperator
+
+При помощи операторов в Airflow можно настроить простую логику  **if-else**. Сделать это можно, например, при помощи **BranchPythonOperator**. Этот оператор принимает на вход Python-функцию, которая возвращает идентификаторы задач (или, другими словами, имена задач внутри **DAG**). После выполнения функции **DAG** будет выполнять соответствующие задачи из этого списка.
+![[file-20251104153810848.png|600]]
+```python
+# Функция для условия выбора нужного task_id 
+def branch_func(**kwargs):  
+	xcom_value = 10 
+	if xcom_value >= 5: 
+		return 'continue_task' 
+	return 'stop_task' 
+	
+# Стартовый оператор, который пуляет в XCom число 10 
+start_op = BashOperator( 
+task_id='start_task', 
+bash_command="echo 10", 
+dag=dag) 
+
+# Оператор условия 
+branch_op = BranchPythonOperator( 
+task_id='branch_task', 
+python_callable=branch_func, 
+provide_context=True, 
+dag=dag) 
+
+# Операторы, которые ничего не делают 
+continue_op = DummyOperator(task_id='continue_task', dag=dag) 
+stop_op = DummyOperator(task_id='stop_task', dag=dag) 
+
+# Определение зависимостей 
+start_op >> branch_op >> [continue_op, stop_op]
+```
+
+Ещё одним способом добавить условную логику в группы задач в Airflow является использование оператора **ShortCircuitOperator**. Этот оператор принимает функцию на Python, которая возвращает **True** или **False** в зависимости от условия. Если функция возвращает **True**, выполнение **DAG** продолжается, а если **False**, то все последующие задачи игнорируются.
+```python
+cond_true = ShortCircuitOperator( 
+	task_id='condition_is_True', python_callable=lambda: True, dag=dag
+) 
+cond_false = ShortCircuitOperator( 
+	task_id='condition_is_False', python_callable=lambda: False, dag=dag 
+) 
+cond_true1 = ShortCircuitOperator( 
+	task_id='condition_is_True1', python_callable=lambda: True, dag=dag 
+) 
+cond_false1 = ShortCircuitOperator( 
+	task_id='condition_is_False1', python_callable=lambda: False, dag=dag 
+) 
+cond_true2 = ShortCircuitOperator( 
+	task_id='condition_is_True2', python_callable=lambda: True, dag=dag 
+) 
+cond_false2 = ShortCircuitOperator( 
+	task_id='condition_is_False2', python_callable=lambda: False, dag=dag 
+)
+
+chain(cond_true, cond_true1, cond_true2) 
+chain(cond_false, cond_false1, cond_false2)
+```
+![[file-20251104154623331.png]]
+
+## Прочие операторы
+
+### PythonVirtualenvOperator
+Этот оператор в целом похож на **PythonOperator**, однако у него есть некоторые отличия. Если мы работаем с **PythonOperator** в его классической реализации, то все библиотеки, с которыми мы можем работать, ограничиваются только теми, которые уже установлены в текущем окружении. 
+
+ Иногда нам нужно просто выполнить какой-то код и использовать маленькую библиотеку, которая не установлена в текущем окружении. В таком случае мы можем воспользоваться **PythonVirtualenvOperator**, который позволяет создать временное виртуальное окружение, установить в него необходимые библиотеки и использовать их для выполнения задачи. Библиотеки нужно передать в аргументе этого оператора. Отмечу что новое окружение будет создано на основе того на котором работает Airflow, и все библиотеки доступные в **PythonOperator** будут доступны в **PythonVirtualenvOperator**.
+
+```python
+from airflow.operators.python_operator import PythonVirtualenvOperator
+
+def print_context(): 
+	# Импорты нужно прописывать в самой функции 
+	import pycountry 
+	country = list(pycountry.countries)[0] 
+	print(country)
+	
+PythonVirtualenvOperator( 
+task_id='print_the_context', 
+python_callable=print_context, 
+dag=dag, 
+# Через запятую можно указать нужные библиотеки
+requirements=["pycountry==24.6.1"]
+)
+```
+
+### SimpleHttpOperator
+**HTTPOperator** позволяет делать HTTP-запросы, например, GET или POST, и получать ответ.
+Оператор может быть полезен, когда  нужно обратиться по какому-то адресу и выгрузить небольшой кусочек данных. Тогда мы можем сделать это с помощью этого оператора и **XCom**.
+
+```python
+from airflow.operators.http_operator import SimpleHttpOperator 
+
+t1 = SimpleHttpOperator( 
+task_id='get', 
+method='GET', 
+# Мы указываем URL в Connection
+http_conn_id='http_default', 
+# Прописываем endpoint, то есть метод API 
+endpoint='all', 
+dag=dag)
+```
+
+Такой оператор автоматически запишет ответ API в **XCom** с ключом по умолчанию **return_value**. Его можно будет найти в **XCom**, например, по *dag_id*.
+![[file-20251104164817300.png]]
+
+### ClickHouseOperator
+Этот оператор в целом схож с любым другим SQL-оператором в Airflow. Его основная функция — выполнение SQL-запросов. Как и в случае с **HTTPOperator**, мы не выгружаем данные напрямую, а просто выполняем SQL-запросы.
+
+Основная его польза заключается в том, что если мы хотим реализовать ETL-процесс внутри базы данных, этот оператор отлично подходит для таких задач. Помните, когда мы говорили про ETL-подход? Сначала мы загружаем данные, а затем обрабатываем их. Так вот, для таких задач этот тип оператора идеально подходит. С помощью **ClickHouseOperator** мы можем с использованием большого объема кода и различных связей реализовать витрины данных, с которыми могут работать аналитики.
+
+```python
+from airflow_clickhouse_plugin.operators.clickhouse import ClickHouseOperator
+
+create_view = ClickHouseOperator( 
+task_id='create_view', 
+sql= """ CREATE VIEW currency_view as select * from currency_data where date = '04/01/2024' """ , 
+clickhouse_conn_id='clickhouse_default', 
+dag=dag
+)
+```
+
+
+## Сенсоры
+
+**Сенсор** - это обычный оператор, но с рядом особенностей. Основная задача сенсора — выполнить какое-то действие и на основе полученного результата определить, является ли он успешным. Если результат **False**, сенсор повторяет процедуру снова. Проверка выполняется через заданные интервалы времени и определенное количество попыток.
+
+Сенсоры применяются, в первую очередь, для задач, связанных с проверкой появления данных в каком-то месте. Можно создать сенсор, который будет производить проверку и передавать управление следующему оператору при появлении нужных данных.
+
+```python
+sensor = PythonSensor( 
+task_id='task', 
+mode='poke', 
+# Вызываемая функция котоаря проводит проверку состояния чего либо 
+python_callable=func, 
+ # Через какое время перезапускаться 
+poke_interval=1,
+# Время до принудительного падения
+timeout=10, 
+# Пропустить, скипнуть, задачу если она закончится неудачей
+soft_fail=True  
+)
+```
+
+ 
+
+
+
+
+
+
+
+
 
 
 
