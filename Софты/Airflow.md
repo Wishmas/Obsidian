@@ -958,6 +958,112 @@ def on_success_callback(context):
 	return send_message.execute(context=context)
 ```
 
+## Автогенерация
+
+Поскольку Airflow реализован на Python, вы можете с помощью циклов генерировать задачи или даже DAG'и. Такая особенность очень полезна, когда нам нужно выполнять много однотипной работы над похожими объектами.
+
+### Генерация дагов
+```python
+# Функция для создания DAG'ов
+def create_dag(dag_id,
+               dag_number,
+               default_args,
+               schedule='@daily'):
+
+    dag = DAG(dag_id,
+              schedule_interval=schedule, 
+              default_args=default_args,
+              tags=['examples'])
+
+    with dag:
+        t1 = DummyOperator(task_id=f'task', dag=dag)
+
+    return dag  
+
+default_args = {'owner': 'airflow',
+                'start_date': days_ago(1)}  
+# Код для генерации нескольких DAG'ов через range()
+for dag_number in range(1, 4):
+    dag_id = f'0_Examples_5_7_2_dag_generate_{dag_number}' 
+    # globals() возвращает словарь с глобальной таблицей объектов в текущем модуле.
+    # Это позволяет динамически создавать и сохранять DAG'и с уникальными идентификаторами
+    globals()[dag_id] = create_dag(dag_id, dag_number, default_args)
+```
+
+Когда вы создаёте какой-либо `.py` файл, то вместе с этим файлом создаётся так называемое глобальное пространство имен (глобальная область видимости `globals` ). В этом пространстве будут храниться все ваши переменные, функции, классы и объекты. Конструкция *globals()[name]* позволяет напрямую добавлять туда именованные переменные, что очень помогает в задачах автоматической генерации множества объектов.
+
+### Генерация задач
+```python
+def process_data(step):
+	print(step)
+
+with DAG('dynamic_chains', default_args=default_args, schedule_interval='@daily') as dag:
+    
+    previous_task = None
+    steps = ['extract', 'transform', 'load']
+    
+    for step in steps:
+        current_task = PythonOperator(
+            task_id=f'{step}_data',
+            python_callable=process_data,
+            op_kwargs={'step': step}
+        )
+        
+        if previous_task:
+            previous_task >> current_task
+        
+        previous_task = current_task
+```
+
+## Плагины
+
+Airflow дает нам возможность создавать свои **плагины**, используя **операторы** и **хуки**. Мы можем, например, написать свой кастомный оператор, который выполняет какое-либо действие, а также свои кастомные хуки.
+
+**Hook** — это более низкоуровневый объект с точки зрения архитектуры. Он служит прослойкой между сторонними библиотеками, которые работают с базами данных или API, и интерфейсом **Operator** , который позволяет нам настраивать наши пайплайны. Хуки в **Airflow** используются для организации кода, который выполняет непосредственные манипуляции с данными.
+
+Чтобы начать работать с плагинами, нам нужна конкретная папка как и с дагами. Этот параметр определяется при установке Airflow. Структура папки имеет определённый **формат**, который лучше не нарушать. Либо же мы можем использовать уже готовые, которые установлены в нашем окружении.
+![](../Вложения/Airflow/file-20251107215042282.png)
+
+Пример того как можно создать кастомный оператор:
+```python
+from airflow.hooks.base import BaseHook
+from airflow.models import BaseOperator
+from airflow import DAG
+from datetime import timedelta
+from airflow.utils.dates import days_ago
+
+import random
+
+
+# Кастомный хук
+class CustomHook(BaseHook):
+
+    # Метод который генерирует случайное число
+    def random_number(self):
+        random.seed(10, version=2)
+        return random.randint(0, 10)
+
+# Кастомный оператор
+class CustomOperator(BaseOperator):
+    def __init__(self,**kwargs,):
+        super().__init__(**kwargs)     
+        self.hook = None # Сюда мы будем передавать объект класса CustomHook
+
+    # Метод отправляет в Xcom некотрое значение
+    def execute(self, context):
+
+        self.hook = CustomHook()
+        return self.hook.random_number()
+
+dag = DAG('dag', schedule_interval=timedelta(days=1), start_date=days_ago(1))
+
+t1 = CustomOperator(task_id='task_1', dag=dag)
+```
+Результат данного кода отправит в Xcom некоторое случайное число.
+
+
+
+
 
 
 
