@@ -24,7 +24,6 @@ np.arange(0, 9, 1.5)
 ---
 -> array([0. , 1.5, 3. , 4.5, 6. , 7.5])
 ```
-
 **Прибавление скаляра к вектору:**
 ```python
 np.array([1,2,3]) + 2 
@@ -626,6 +625,30 @@ print(mse)
 -> [-0.00177639  0.0129965   0.0297391   0.03998941]
 -> 0.47597796477278287
 ```
+**Генерация батчей для стохастического градиентного спуска:**
+```python
+def generate_batches(X, y, batch_size):
+    """
+    param X: np.array[n_objects, n_features] --- матрица объекты-признаки
+    param y: np.array[n_objects] --- вектор целевых переменных
+    """
+    assert len(X) == len(y)
+    np.random.seed(42)
+    X = np.array(X)
+    y = np.array(y)
+    perm = np.random.permutation(len(X))
+
+    batch_start = 0
+    for iter_ in range(int(np.ceil(perm.shape[0] / batch_size))):
+        
+        indexes = perm[batch_start:batch_start+batch_size].copy()
+        x_batch = X[indexes]
+        y_batch = y[indexes]
+        
+        batch_start += batch_size
+        yield x_batch, y_batch
+```
+
 **Собственные значения и векторы матрицы:**
 ```python
 a = np.array([
