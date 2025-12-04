@@ -1,6 +1,6 @@
 {
-  "findText": "|Pasted image 20250114181942",
-  "replaceText": "",
+  "findText": "\\u00A0",
+  "replaceText": " ",
   "useRegEx": true,
   "selOnly": false,
   "caseInsensitive": false,

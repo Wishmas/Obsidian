@@ -6,5 +6,6 @@
   "consistent-attachments-and-links",
   "obsidian-linter",
   "obsidian-regex-replace",
-  "obsidian-latex-suite"
+  "obsidian-latex-suite",
+  "obsidian-plugin-toc"
 ]
