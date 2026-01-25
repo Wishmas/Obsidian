@@ -18,7 +18,7 @@ mkdir -p ./dags ./logs ./plugins
 https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html
 ```bash
 docker compose up airflow-init
-docker compose down --volumes --remove-orphans
+docker compose down --volumes --remove-orphans
 
 docker compose up
 ```
