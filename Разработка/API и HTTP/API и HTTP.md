@@ -399,7 +399,7 @@ curl -X POST \
 
 Более сложные модели можно создавать при помощи методов из библиотеки **typing**.
 
-Например, U**nion** используется для объединения типов:
+Например, **Union** используется для объединения типов:
 
 ```python
 class Item(BaseModel):
@@ -472,15 +472,17 @@ async def func_with_body_param(query_param: Annotated[<type>, Query()]):
 ```
 
 ```python
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 
 app = FastAPI()
 
-fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
-
-@app.get("/items/")
-async def read_item(skip: int = 0, limit: int = 10):
-    return fake_items_db[skip : skip + limit]
+@app.get("/videos/search")
+async def search_by_tags(
+    tag: str = Query(...), # ... - параметр обязательный
+    limit: int | None = Query(10), # значеняи по умолчанию
+    exact: bool = Query(False)
+):
+...
 ```
 
 `Query`-параметры представляют из себя набор пар ключ-значение, которые идут после знака `?` в URL-адресе, разделенные символами `&` .
